@@ -49,4 +49,10 @@ class Cuvette():
         self.ser.write(b'[F1 TC i]')
         print("Temperature Control disabled.")
         
-    
+    def set_temp(self, temp):
+        self.ser.write(bytes('[F1 TT S {}]'.format(temp),'utf-8'))
+        
+    def get_set_temp(self):
+        self.ser.write(b'[F1 TT ?]')
+        output = self.read().decode("utf-8")
+        return float(output[7:-1])
