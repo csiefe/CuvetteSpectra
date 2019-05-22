@@ -10,7 +10,7 @@ range and integration time
 import serial
 import time
 from matplotlib import pyplot as plt
-import time
+plt.rcParams.update({'font.size': 22})
 
 #May need to change port name, look up in Device Manager on Windows
 
@@ -48,8 +48,10 @@ for t in Temp:
     
     spectra = plt.figure()
     plt.plot(spec.wavelengths(),spec.intensities())
-    spectra.suptitle("Spectra at temperature {} C".format(t))
-
+    #make this plot more readable 
+    spectra.set(xlabel = 'Wavelength (nm)', ylabel = 'Intensity (a.u.)', 
+                title = "Spectra at temperature {} C".format(t)+r'$^\circ$')
+   
 def read():
     #The bits sent through the USB end with a ']' instead of a '\n', so we're
     #using that to read until the end of the command
