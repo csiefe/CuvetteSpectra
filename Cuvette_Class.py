@@ -9,6 +9,7 @@ from Quantum Northwest, Inc.
 
 @author: Chris
 """
+import serial
 
 class Cuvette():
     #This needs to be checked. Make sure that I'm using __init__() correctly.
@@ -17,6 +18,10 @@ class Cuvette():
         self.ser = ser
         self.ser.baudrate = 19200
         self.ser.timeout = 5
+        
+    def open_from_port(cls, COM_name):
+        ser = serial.Serial(COM_PORT)
+        return cls(ser = ser)
         
     def read(self):
         #The bits sent through the USB end with a ']' instead of a '\n', so we're
@@ -56,3 +61,27 @@ class Cuvette():
         self.ser.write(b'[F1 TT ?]')
         output = self.read().decode("utf-8")
         return float(output[7:-1])
+    
+    #def auto_report_temp_on(self):
+    
+    #def auto_report_temp_off(self):
+    
+    def status(self):
+        self.ser.write(b'[F1 IS ?]')
+        output = self.read().decode("utf-8")
+        num_errors = int(output[7:8])
+        if output[8:9] == '+':
+            stir_status = True
+        else:
+            stir_status = False
+        if output[9:10] == '+':
+            temp_control_status = True
+        else:
+            temp_control_status = False 
+        if output[10:11] == 'S':
+            temp_stability = True
+        else:
+            temp_stability = False
+        return num_errors, stir_status, temp_control_status, temp_stability
+        
+        
