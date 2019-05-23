@@ -9,16 +9,19 @@ range and integration time
 import os
 import serial
 import time
+import seabreeze.spectrometers as sb
 from matplotlib import pyplot as plt
 plt.rcParams.update({'font.size': 22})
 import datetime
+from Cuvette_Class import Cuvette
 #May need to change port name, look up in Device Manager on Windows
-
+COM_NAME = 'COM5'
 
 
 #Create a folder for the day if it doesn't exist
 #%%
-fileLocation = 'C:/Users/Claire/Documents/PostDoc/CuvetteSpectra/data/'
+#fileLocation = 'C:/Users/Claire/Documents/PostDoc/CuvetteSpectra/data/'
+fileLocation = 'C:/Users/Chris/Documents/Dionne Group/Lab Software/CuvetteSpectra/CuvetteSpectra/data/'
 date = datetime.datetime.now().strftime("%Y%m%d")
 while not os.path.isdir(fileLocation + date):
     os.mkdir(fileLocation+date)
@@ -56,20 +59,12 @@ dataFile.close()
 
 #Create running experiment
 
-
 try:
-    
-    COM_PORT = 'com3'
-    ser = serial.Serial(COM_PORT)
-
-    #Baudrate is the rate at which information is being transferred through the USB
-    ser.baudrate = 19200
-    #Timeout forces the program to stop if nothing happens after 5 seconds.
-    ser.timeout = 5
+    C = Cuvette.open_from_port(COM_NAME)
     print("Serial port is being opened")
 except:
     print("serial port was initiated")
-
+#%%
 
 try:
     spec = sb.Spectrometer.from_serial_number()
@@ -77,14 +72,14 @@ except:
     'Device is opened'
 intTime = 20000
 spec.integration_time_micros(20000)
-
+#%%
 #Goal is to sweeep through temperatures and plot spectra
 
 Temp = [19, 20, 21]
 
 for t in Temp:
-    set_temp(t)
-    temp = get_temp()
+    C.set_temp(t)
+    temp = C.get_current_temp()
     while t != float(str(temp)[-7:-2]):
         time.sleep(5)
         temp = get_temp()
