@@ -18,9 +18,10 @@ class Cuvette():
         self.ser = ser
         self.ser.baudrate = 19200
         self.ser.timeout = 5
-        
+    
+    @classmethod
     def open_from_port(cls, COM_name):
-        ser = serial.Serial(COM_PORT)
+        ser = serial.Serial(COM_name)
         return cls(ser = ser)
         
     def read(self):
