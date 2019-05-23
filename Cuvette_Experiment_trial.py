@@ -7,11 +7,13 @@ range and integration time
 @author: Claire
 """
 import os
+import csv
 import serial
 import time
 from matplotlib import pyplot as plt
 plt.rcParams.update({'font.size': 22})
 import datetime
+import Cuvette_Class
 #May need to change port name, look up in Device Manager on Windows
 
 
@@ -56,21 +58,9 @@ dataFile.close()
 
 #Create running experiment
 
+cuvette = Cuvette_Class.Cuvette.open_from_port()
 
-try:
-    
-    COM_PORT = 'com3'
-    ser = serial.Serial(COM_PORT)
-
-    #Baudrate is the rate at which information is being transferred through the USB
-    ser.baudrate = 19200
-    #Timeout forces the program to stop if nothing happens after 5 seconds.
-    ser.timeout = 5
-    print("Serial port is being opened")
-except:
-    print("serial port was initiated")
-
-
+#set up spectrometer
 try:
     spec = sb.Spectrometer.from_serial_number()
 except:
@@ -81,8 +71,9 @@ spec.integration_time_micros(20000)
 #Goal is to sweeep through temperatures and plot spectra
 
 Temp = [19, 20, 21]
-
+fileName = 1
 for t in Temp:
+    
     set_temp(t)
     temp = get_temp()
     while t != float(str(temp)[-7:-2]):
@@ -95,6 +86,11 @@ for t in Temp:
     spectra.set(xlabel = 'Wavelength (nm)', ylabel = 'Intensity (a.u.)', 
                 title = "Spectra at temperature {} C".format(t)+r'$^\circ$')
    
+    
+    #save wavelengths adn intensities with temperature, time
+    dataFile = open(path+str(fileName)+'.csv', w+) as csv
+    dataFile.write("temperature + '\n')
+    fileName = fileName+1
 def read():
     #The bits sent through the USB end with a ']' instead of a '\n', so we're
     #using that to read until the end of the command
