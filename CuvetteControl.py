@@ -13,6 +13,8 @@ import seabreeze.spectrometers as sb
 from matplotlib import pyplot as plt
 plt.rcParams.update({'font.size': 22})
 import datetime
+import pandas as pd
+import numpy as np
 from Cuvette_Class import Cuvette
 #May need to change port name, look up in Device Manager on Windows
 COM_NAME = 'COM5'
@@ -76,33 +78,26 @@ spec.integration_time_micros(20000)
 #Goal is to sweeep through temperatures and plot spectra
 
 Temp = [19, 20, 21]
+C.temp_control_on()
 
 for t in Temp:
     C.set_temp(t)
     temp = C.get_current_temp()
-    while t != float(str(temp)[-7:-2]):
+    while t != temp:
         time.sleep(5)
-        temp = get_temp()
-    
-    spectra = plt.figure()
-    plt.plot(spec.wavelengths(),spec.intensities())
+        temp = C.get_current_temp()
+        print(temp)
+
+    #spectra = plt.figure()
+    wavelengths = spec.wavelengths()
+    intensities = spec.intensities()
     #make this plot more readable 
-    spectra.set(xlabel = 'Wavelength (nm)', ylabel = 'Intensity (a.u.)', 
-                title = "Spectra at temperature {} C".format(t)+r'$^\circ$')
-   
-def read():
-    #The bits sent through the USB end with a ']' instead of a '\n', so we're
-    #using that to read until the end of the command
-    return ser.read_until(b']')
+    #spectra.set(xlabel = 'Wavelength (nm)', ylabel = 'Intensity (a.u.)', 
+                #title = "Spectra at temperature {} C".format(t)+r'$^\circ$')
+    df2 = pd.DataFrame({"intensities": intensities})
+    df3 = pd.DataFrame({"temp": np.array([t])})
+    df1 = pd.DataFrame({"wavelengths": wavelengths})
 
-def get_id():
-    ser.write(b'[F1 ID ?]')
-    return read()
-
-def set_temp(temp):
-    ser.write(bytes('[F1 TT S {}]'.format(temp),'utf-8'))
+    df = pd.concat([df1,df2,df3], ignore_index = True, axis = 1)
+    df.to_csv(path + "test{}.csv".format(t), index = False, header = ["WL", "Int", "temp"])
     
-
-def get_temp():
-    ser.write(b'[F1 TT ?]')
-    return read()
