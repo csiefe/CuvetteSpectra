@@ -73,7 +73,6 @@ class MyApp(QMainWindow):
         self.ui.MplWidget.canvas.draw()
             
 
-
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MyApp()
