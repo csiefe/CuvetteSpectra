@@ -42,13 +42,13 @@ class MyApp(QMainWindow):
         #initialize the two instruments
         self.ui.init_spec_button.clicked.connect(self.initSpec)
         self.ui.init_cuvette_button.clicked.connect(self.initCuvette)
-<<<<<<< HEAD
+
         self.ui.plot_button.clicked.connect(self.plotSomething)
         
-=======
-        self.ui.collect_spectrum_button.clicked.connect(self.collectSpectrum)
 
->>>>>>> 229278959f38821df363b2a67e66244d1196266c
+
+        self.ui.plot_button.clicked.connect(self.plotSomething)        
+
     def initSpec(self):
         #how do we except 2 different types of error (already connected and not connected at all)
         try:
@@ -70,22 +70,20 @@ class MyApp(QMainWindow):
             COM_NAME = self.ui.comPort.toPlainText()
             self.ui.logOutput.setText('error, either already connected, ComPort was incorrect, or cuvette' +
                                       'holder not connected ' + str(COM_NAME))
-<<<<<<< HEAD
-    
 
-=======
+
+
             
-    def collectSpectrum(self):
-        data = [0, 1, 2, 3, 4]
-        self.ui.spectrumPlot.plot(data, data)
->>>>>>> 229278959f38821df363b2a67e66244d1196266c
-        
+
+
+
     def plotSomething(self):
     
         self.ui.MplWidget.canvas.axes.clear()
         self.ui.MplWidget.canvas.axes.plot((np.random.rand(5)))
         self.ui.MplWidget.canvas.draw()
             
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MyApp()
