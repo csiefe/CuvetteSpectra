@@ -11,6 +11,8 @@ Created on Wed May 29 10:10:56 2019
 import sys
 from PyQt5.QtWidgets import QMainWindow, QApplication
 from PyQt5 import uic
+import pyqtgraph as pg
+from pyqtgraph import PlotWidget
 
 import os
 import serial
@@ -40,8 +42,9 @@ class MyApp(QMainWindow):
         #initialize the two instruments
         self.ui.init_spec_button.clicked.connect(self.initSpec)
         self.ui.init_cuvette_button.clicked.connect(self.initCuvette)
-        self.ui.plot_button.clicked.connect(self.plotSomething)
-        
+
+        self.ui.plot_button.clicked.connect(self.plotSomething)        
+
     def initSpec(self):
         #how do we except 2 different types of error (already connected and not connected at all)
         try:
@@ -55,7 +58,7 @@ class MyApp(QMainWindow):
     def initCuvette(self):
         
         try:
-            COM_NAME = str(self.ui.comPort.toPlainText())
+            COM_NAME = str(self.ui.comPort.text())
             cuvette = Cuvette.open_from_port(COM_NAME)
             text = "Serial port is being opened"
             self.ui.logOutput.setText(text)
@@ -65,7 +68,6 @@ class MyApp(QMainWindow):
                                       'holder not connected ' + str(COM_NAME))
     
 
-        
     def plotSomething(self):
     
         self.ui.MplWidget.canvas.axes.clear()
