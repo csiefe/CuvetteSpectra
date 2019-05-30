@@ -11,8 +11,6 @@ Created on Wed May 29 10:10:56 2019
 import sys
 from PyQt5.QtWidgets import QMainWindow, QApplication
 from PyQt5 import uic
-import pyqtgraph as pg
-from pyqtgraph import PlotWidget
 
 import os
 import serial
@@ -65,7 +63,7 @@ class MyApp(QMainWindow):
             COM_NAME = str(self.ui.comPort.text())
             cuvette = Cuvette.open_from_port(COM_NAME)
             text = "Serial port is being opened"
-            self.ui.logOutput.setText(text)
+            self.ui.logOutput.setText(text) 
         except:
             COM_NAME = self.ui.comPort.toPlainText()
             self.ui.logOutput.setText('error, either already connected, ComPort was incorrect, or cuvette' +
