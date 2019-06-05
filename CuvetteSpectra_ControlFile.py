@@ -84,33 +84,45 @@ class MyApp(QMainWindow):
             
     
     def tempSeries(self):
-        start_temp = self.ui.start_temp_temp_series.value()
-        end_temp = self.ui.end_temp_temp_series.value()
-        temp_int = self.ui.temp_int_temp_series.value()
+        start_temp = float(self.ui.start_temp_temp_series.text())
+        end_temp = float(self.ui.end_temp_temp_series.text())
+        temp_int = float(self.ui.temp_int_temp_series.text())
         Temp = np.arange(start_temp, end_temp, temp_int)
         cuvette.temp_control_on()
 
         for t in Temp:
             cuvette.set_temp(t)
+            self.ui.displaySetTemp.display(t)
+            time.sleep(2)
             current_temp = cuvette.get_current_temp()
             self.ui.displayCurrentTemp.display(current_temp)
-            
-            while t != temp:
-                time.sleep(5)
-                temp = cuvette.get_current_temp()
-
-
-    #spectra = plt.figure()
-    wavelengths = spec.wavelengths()
-    intensities = spec.intensities()
-    #make this plot more readable 
-    #spectra.set(xlabel = 'Wavelength (nm)', ylabel = 'Intensity (a.u.)', 
-                #title = "Spectra at temperature {} C".format(t)+r'$^\circ$')
-    df2 = pd.DataFrame({"intensities": intensities})
-    df3 = pd.DataFrame({"temp": np.array([t])})
-    df1 = pd.DataFrame({"wavelengths": wavelengths})
-    df = pd.concat([df1,df2,df3], ignore_index = True, axis = 1)
-    df.to_csv(path + "test{}.csv".format(t), index = False, header = ["WL", "Int", "temp"])
+            status = cuvette.status()
+            status_text = str(status[3])
+            #status = str(status[3])
+            self.ui.stabilityDisplay.setText(status_text) 
+            app.processEvents()
+            #while t != current_temp:
+            while not status[3]:
+                current_temp = cuvette.get_current_temp()
+                self.ui.displayCurrentTemp.display(current_temp)
+                status = cuvette.status()
+                status_text = str(status[3])
+                self.ui.stabilityDisplay.setText(status_text)
+                app.processEvents()
+                print(current_temp, status_text)
+                time.sleep(1)
+            #spectra = plt.figure()
+            app.processEvents()
+            wavelengths = spec.wavelengths()
+            intensities = spec.intensities()
+            self.plotSomething()
+            app.processEvents()
+            df2 = pd.DataFrame({"intensities": intensities})
+            df3 = pd.DataFrame({"temp": np.array([t])})
+            df1 = pd.DataFrame({"wavelengths": wavelengths})
+            df = pd.concat([df1,df2,df3], ignore_index = True, axis = 1)
+            path = 'C:/Users/Chris/Documents/Dionne Group/Lab Software/CuvetteSpectra/CuvetteSpectra/data/'
+            df.to_csv(path + "test{}.csv".format(t), index = False, header = ["WL", "Int", "temp"])
     
 
 
