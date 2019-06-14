@@ -43,7 +43,10 @@ class MyApp(QMainWindow):
         self.ui.collect_spectrum_button.clicked.connect(self.plotSomething)
         #Temp Series Experiment
         self.ui.start_temp_series_button.clicked.connect(self.tempSeries)
+        self.ui.stop_exp_button.setCheckable(True)
+        self.ui.stop_exp_button.toggle()
         
+    
         
     def initSpec(self):
         #how do we except 2 different types of error (already connected and not connected at all)
@@ -67,10 +70,13 @@ class MyApp(QMainWindow):
             self.ui.logOutput.setText(text) 
             return cuvette
         except:
-            COM_NAME = self.ui.comPort.toPlainText()
+            COM_NAME = self.ui.comPort.text()
             self.ui.logOutput.setText('error, either already connected, ComPort was incorrect, or cuvette' +
                                       'holder not connected ' + str(COM_NAME))
-
+    
+    def stop(self):
+        return False
+        
     def plotSomething(self):
         wavelengths = spec.wavelengths()
         intensities = spec.intensities()
@@ -89,8 +95,10 @@ class MyApp(QMainWindow):
         temp_int = float(self.ui.temp_int_temp_series.text())
         Temp = np.arange(start_temp, end_temp, temp_int)
         cuvette.temp_control_on()
-
+        
+        
         for t in Temp:
+            self.ui.stop_exp_button.setChecked(False)
             cuvette.set_temp(t)
             self.ui.displaySetTemp.display(t)
             time.sleep(2)
@@ -98,30 +106,37 @@ class MyApp(QMainWindow):
             self.ui.displayCurrentTemp.display(current_temp)
             status = cuvette.status()
             status_text = str(status[3])
-            #status = str(status[3])
             self.ui.stabilityDisplay.setText(status_text) 
-            app.processEvents()
-            #while t != current_temp:
+            
             while not status[3]:
+                app.processEvents()
+                time.sleep(0.1)
+                if self.ui.stop_exp_button.isChecked():
+                    self.ui.stop_exp_button.setChecked(False)
+                    return
+               
                 current_temp = cuvette.get_current_temp()
                 self.ui.displayCurrentTemp.display(current_temp)
                 status = cuvette.status()
                 status_text = str(status[3])
                 self.ui.stabilityDisplay.setText(status_text)
-                app.processEvents()
-                print(current_temp, status_text)
-                time.sleep(1)
-            #spectra = plt.figure()
-            app.processEvents()
+                
+            
             wavelengths = spec.wavelengths()
             intensities = spec.intensities()
             self.plotSomething()
+            #check to see if we can click button
+            
+            
             app.processEvents()
+            
             df2 = pd.DataFrame({"intensities": intensities})
             df3 = pd.DataFrame({"temp": np.array([t])})
             df1 = pd.DataFrame({"wavelengths": wavelengths})
             df = pd.concat([df1,df2,df3], ignore_index = True, axis = 1)
-            path = 'C:/Users/Chris/Documents/Dionne Group/Lab Software/CuvetteSpectra/CuvetteSpectra/data/'
+            #path = 'C:/Users/Chris/Documents/Dionne Group/Lab Software/CuvetteSpectra/CuvetteSpectra/data/'
+            path = 'C:/Users/Claire/Documents/Postdoc/CuvetteSpectra/data/'
+            
             df.to_csv(path + "test{}.csv".format(t), index = False, header = ["WL", "Int", "temp"])
     
 
