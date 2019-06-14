@@ -8,8 +8,10 @@ Created on Wed May 29 10:10:56 2019
 ""
 
 import sys
+from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QApplication
 from PyQt5 import uic
+from PyQt5.QtCore import pyqtSlot, QObject
 
 import os
 import serial
@@ -23,6 +25,7 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt4agg import (
     FigureCanvasQTAgg as FigureCanvas,
     NavigationToolbar2QT as NavigationToolbar)
+from Model import Model
 
 
 qtCreatorFile = "CuvetteSpectra_GUI.ui" # Enter file here.
@@ -33,6 +36,7 @@ class MyApp(QMainWindow):
     
     def __init__(self):
         super(MyApp, self).__init__()
+        self.model = Model()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         
@@ -51,9 +55,64 @@ class MyApp(QMainWindow):
         self.ui.stir_button.setStyleSheet("QPushButton { background-color: purple }")
         self.ui.stir_button.clicked.connect(self.stir)
     
+        #add file buttons
+        self.ui.file_button.clicked.connect(self.browseSlot)
+        self.ui.file_lineedit.returnPressed.connect(self.returnPressedSlot)
+    
+    def refreshAll( self ):
+        '''
+        Updates the widgets whenever an interaction happens.
+        Typically some interaction takes place, the UI responds,
+        and informs the model of the change.  Then this method
+        is called, pulling from the model information that is
+        updated in the GUI.
+        '''
+        self.ui.file_lineedit.setText( self.model.getFileName() )
+    
+    
+    def debugPrint(self, msg):
+        self.ui.logOutput.setText(msg)
+        
+    @pyqtSlot()
+    def returnPressedSlot(self):
+        self.debugPrint("RETURN key Pressed in LineEDIT widget")
+        filePath =  self.ui.file_lineedit.text()
+        if self.model.isValid(filePath):
+            self.model.setFileName( self.lineEdit.text() )
+            self.refreshAll()
+        else:
+            print("invalid file path?")
+            m = self.ui.logOutput
+            m.setText("Invalid file name!\n" + filePath )
+            m.setIcon(QtWidgets.QMessageBox.Warning)
+            m.setStandardButtons(QtWidgets.QMessageBox.Ok
+                                 | QtWidgets.QMessageBox.Cancel)
+            m.setDefaultButton(QtWidgets.QMessageBox.Cancel)
+            ret = m.exec_()
+            self.ui.file_lineedit.setText( "" )
+            self.refreshAll()
+            self.debugPrint( "Invalid file specified: " + filePath  )
+            
+            
+    @pyqtSlot()
+    def browseSlot(self):
+        self.debugPrint("BrowseButtonPressed")
+        ''' Called when the user presses the Browse button
+        '''
+        #self.debugPrint( "Browse button pressed" )
+        options = QtWidgets.QFileDialog.Options()
+        options |= QtWidgets.QFileDialog.DontUseNativeDialog
+        filePath = QtWidgets.QFileDialog.getExistingDirectory(
+                        None,
+                        "Select Directory")
+        if filePath:
+            self.debugPrint( "setting file name: " + filePath )
+            self.model.setFileName( filePath )
+            self.refreshAll()
 
     
-        
+    
+    
     def initSpec(self):
         #how do we except 2 different types of error (already connected and not connected at all)
         try:
@@ -65,6 +124,7 @@ class MyApp(QMainWindow):
         except:
             x = 'Device is opened'
             self.ui.logOutput.setText(x)
+        
         
     def initCuvette(self):
         
