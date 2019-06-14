@@ -1257,6 +1257,40 @@
      <string>20</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="stir_button">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>350</y>
+      <width>111</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>true</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>Stirring On</string>
+    </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <property name="autoExclusive">
+     <bool>false</bool>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
    <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
@@ -1288,6 +1322,9 @@
        </property>
        <property name="text">
         <string>Stop</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
        </property>
        <property name="default">
         <bool>false</bool>

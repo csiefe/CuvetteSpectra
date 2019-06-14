@@ -46,6 +46,12 @@ class MyApp(QMainWindow):
         self.ui.stop_exp_button.setCheckable(True)
         self.ui.stop_exp_button.toggle()
         
+        self.ui.stir_button.setCheckable(True)
+        self.ui.stir_button.toggle()
+        self.ui.stir_button.setStyleSheet("QPushButton { background-color: purple }")
+        self.ui.stir_button.clicked.connect(self.stir)
+    
+
     
         
     def initSpec(self):
@@ -77,6 +83,16 @@ class MyApp(QMainWindow):
     def stop(self):
         return False
         
+    def stir(self):
+        if self.ui.stir_button.isChecked():
+            cuvette.stir_on()
+            self.ui.stir_button.setText("Stir On")
+            self.ui.stir_button.setStyleSheet("QPushButton { background-color: blue }")
+        else:
+            cuvette.stir_off()
+            self.ui.stir_button.setText("Stir Off")
+            self.ui.stir_button.setStyleSheet("QPushButton { background-color: red }")
+            
     def plotSomething(self):
         wavelengths = spec.wavelengths()
         intensities = spec.intensities()
