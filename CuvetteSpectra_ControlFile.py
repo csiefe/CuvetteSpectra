@@ -27,7 +27,7 @@ from matplotlib.backends.backend_qt4agg import (
     NavigationToolbar2QT as NavigationToolbar)
 from Model import Model
 
-
+global filePath
 qtCreatorFile = "CuvetteSpectra_GUI.ui" # Enter file here.
  
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
@@ -75,6 +75,7 @@ class MyApp(QMainWindow):
         
     @pyqtSlot()
     def returnPressedSlot(self):
+        global filePath
         self.debugPrint("RETURN key Pressed in LineEDIT widget")
         filePath =  self.ui.file_lineedit.text()
         if self.model.isValid(filePath):
@@ -96,6 +97,7 @@ class MyApp(QMainWindow):
             
     @pyqtSlot()
     def browseSlot(self):
+        global filePath
         self.debugPrint("BrowseButtonPressed")
         ''' Called when the user presses the Browse button
         '''
@@ -166,10 +168,11 @@ class MyApp(QMainWindow):
             
     
     def tempSeries(self):
+        global filePath
         start_temp = float(self.ui.start_temp_temp_series.text())
         end_temp = float(self.ui.end_temp_temp_series.text())
         temp_int = float(self.ui.temp_int_temp_series.text())
-        Temp = np.arange(start_temp, end_temp, temp_int)
+        Temp = np.linspace(start_temp, end_temp, (start_temp - end_temp)/temp_int + 1)
         cuvette.temp_control_on()
         
         
@@ -211,9 +214,9 @@ class MyApp(QMainWindow):
             df1 = pd.DataFrame({"wavelengths": wavelengths})
             df = pd.concat([df1,df2,df3], ignore_index = True, axis = 1)
             #path = 'C:/Users/Chris/Documents/Dionne Group/Lab Software/CuvetteSpectra/CuvetteSpectra/data/'
-            path = 'C:/Users/Claire/Documents/Postdoc/CuvetteSpectra/data/'
+            #path = 'C:/Users/Claire/Documents/Postdoc/CuvetteSpectra/data/'
             
-            df.to_csv(path + "test{}.csv".format(t), index = False, header = ["WL", "Int", "temp"])
+            df.to_csv(filePath + "\test{}.csv".format(t), index = False, header = ["WL", "Int", "temp"])
     
 
 
