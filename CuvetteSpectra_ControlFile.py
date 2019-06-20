@@ -90,7 +90,6 @@ class MyApp(QMainWindow):
             m.setStandardButtons(QtWidgets.QMessageBox.Ok
                                  | QtWidgets.QMessageBox.Cancel)
             m.setDefaultButton(QtWidgets.QMessageBox.Cancel)
-            ret = m.exec_()
             self.ui.file_lineedit.setText( "" )
             self.refreshAll()
             self.debugPrint( "Invalid file specified: " + filePath  )
@@ -179,12 +178,14 @@ class MyApp(QMainWindow):
             
     
     def tempSeries(self):
-        global filePath
         start_temp = float(self.ui.start_temp_temp_series.text())
         end_temp = float(self.ui.end_temp_temp_series.text())
         temp_int = float(self.ui.temp_int_temp_series.text())
         Temp = np.linspace(start_temp, end_temp, abs((start_temp - end_temp))/temp_int + 1)
         cuvette.temp_control_on()
+        name = self.ui.file_name_lineedit.text()
+        print('filePath is ' + filePath)
+        Model.createExpFolder(name, filePath)
         
         
         for t in Temp:
@@ -227,7 +228,7 @@ class MyApp(QMainWindow):
             #path = 'C:/Users/Chris/Documents/Dionne Group/Lab Software/CuvetteSpectra/CuvetteSpectra/data/'
             #path = 'C:/Users/Claire/Documents/Postdoc/CuvetteSpectra/data/'
             
-            df.to_csv(filePath + "/test{}.csv".format(t), index = False, header = ["WL", "Int", "temp"])
+            df.to_csv(filePath + "/" + name + "/spectra{}.csv".format(t), index = False, header = ["WL", "Int", "temp"])
     
 
 
