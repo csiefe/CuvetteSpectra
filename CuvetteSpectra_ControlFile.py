@@ -216,7 +216,7 @@ class MyApp(QMainWindow):
             #path = 'C:/Users/Chris/Documents/Dionne Group/Lab Software/CuvetteSpectra/CuvetteSpectra/data/'
             #path = 'C:/Users/Claire/Documents/Postdoc/CuvetteSpectra/data/'
             
-            df.to_csv(filePath + "\test{}.csv".format(t), index = False, header = ["WL", "Int", "temp"])
+            df.to_csv(filePath + "/test{}.csv".format(t), index = False, header = ["WL", "Int", "temp"])
     
 
 
