@@ -54,6 +54,15 @@ class Model:
         return self.fileName
 
 
+    def createExpFolder( self , name , filePath):
+        '''
+        Make a folder for the experiment to save files in.
+        '''
+        while os.isdir(filePath + '/name'):
+            name = name + str(0)
+        os.mkdir(filePath + '/' + name)
+        return name
+
     
     def writeDoc( self, text ):
         '''
