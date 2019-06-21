@@ -58,6 +58,7 @@ class MyApp(QMainWindow):
         #add file buttons
         self.ui.file_button.clicked.connect(self.browseSlot)
         self.ui.file_lineedit.returnPressed.connect(self.returnPressedSlot)
+        self.ui.int_time.returnPressed.connect(self.setIntTime)
     
     def refreshAll( self ):
         '''
@@ -89,7 +90,6 @@ class MyApp(QMainWindow):
             m.setStandardButtons(QtWidgets.QMessageBox.Ok
                                  | QtWidgets.QMessageBox.Cancel)
             m.setDefaultButton(QtWidgets.QMessageBox.Cancel)
-            ret = m.exec_()
             self.ui.file_lineedit.setText( "" )
             self.refreshAll()
             self.debugPrint( "Invalid file specified: " + filePath  )
@@ -128,6 +128,15 @@ class MyApp(QMainWindow):
             self.ui.logOutput.setText(x)
         
         
+    def setIntTime(self):
+        #Set integration time for spectrometer
+        try:
+            spec.integration_time_micros(float(self.ui.int_time.text())*10**6)
+        except:
+            self.ui.logOutput.setText('Spectrometer probably not initialized.')
+            self.ui.logOutput.setText(str(float(self.ui.int_time.text())*10**6))
+        
+        
     def initCuvette(self):
         
         try:
@@ -156,8 +165,9 @@ class MyApp(QMainWindow):
             self.ui.stir_button.setStyleSheet("QPushButton { background-color: red }")
             
     def plotSomething(self):
-        wavelengths = spec.wavelengths()
-        intensities = spec.intensities()
+        mask = (spec.wavelengths() > 500) & (spec.wavelengths() < 750)
+        wavelengths = spec.wavelengths()[mask]
+        intensities = spec.intensities()[mask]
         self.ui.MplWidget.canvas.axes.clear()
         self.ui.MplWidget.canvas.axes.plot(wavelengths, intensities)
         self.ui.MplWidget.canvas.axes.set_xlabel('Wavelength (nm)')
@@ -168,12 +178,14 @@ class MyApp(QMainWindow):
             
     
     def tempSeries(self):
-        global filePath
         start_temp = float(self.ui.start_temp_temp_series.text())
         end_temp = float(self.ui.end_temp_temp_series.text())
         temp_int = float(self.ui.temp_int_temp_series.text())
-        Temp = np.linspace(start_temp, end_temp, (start_temp - end_temp)/temp_int + 1)
+        Temp = np.linspace(start_temp, end_temp, abs((start_temp - end_temp))/temp_int + 1)
         cuvette.temp_control_on()
+        name = self.ui.file_name_lineedit.text()
+        print('filePath is ' + filePath)
+        Model.createExpFolder(name, filePath)
         
         
         for t in Temp:
@@ -200,23 +212,23 @@ class MyApp(QMainWindow):
                 status_text = str(status[3])
                 self.ui.stabilityDisplay.setText(status_text)
                 
-            
-            wavelengths = spec.wavelengths()
-            intensities = spec.intensities()
+            mask = (spec.wavelengths() > 500) & (spec.wavelengths() < 750)
+            wavelengths = spec.wavelengths()[mask]
+            intensities = spec.intensities()[mask]
             self.plotSomething()
             #check to see if we can click button
             
             
             app.processEvents()
             
-            df2 = pd.DataFrame({"intensities": intensities})
+            df2 = pd.DataFrame({"intensities": spec.intensities()})
             df3 = pd.DataFrame({"temp": np.array([t])})
-            df1 = pd.DataFrame({"wavelengths": wavelengths})
+            df1 = pd.DataFrame({"wavelengths": spec.wavelengths()})
             df = pd.concat([df1,df2,df3], ignore_index = True, axis = 1)
             #path = 'C:/Users/Chris/Documents/Dionne Group/Lab Software/CuvetteSpectra/CuvetteSpectra/data/'
             #path = 'C:/Users/Claire/Documents/Postdoc/CuvetteSpectra/data/'
             
-            df.to_csv(filePath + "/test{}.csv".format(t), index = False, header = ["WL", "Int", "temp"])
+            df.to_csv(filePath + "/" + name + "/spectra{}.csv".format(t), index = False, header = ["WL", "Int", "temp"])
     
 
 

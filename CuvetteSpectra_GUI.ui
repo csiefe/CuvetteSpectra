@@ -194,7 +194,7 @@
    <widget class="MplWidget" name="MplWidget" native="true">
     <property name="geometry">
      <rect>
-      <x>360</x>
+      <x>390</x>
       <y>30</y>
       <width>371</width>
       <height>261</height>
@@ -204,8 +204,8 @@
    <widget class="QLCDNumber" name="displayCurrentTemp">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>40</y>
+      <x>300</x>
+      <y>50</y>
       <width>61</width>
       <height>31</height>
      </rect>
@@ -632,8 +632,8 @@
    <widget class="QLCDNumber" name="displaySetTemp">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>80</y>
+      <x>300</x>
+      <y>110</y>
       <width>61</width>
       <height>31</height>
      </rect>
@@ -1060,8 +1060,8 @@
    <widget class="QTextEdit" name="stabilityDisplay">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>120</y>
+      <x>300</x>
+      <y>170</y>
       <width>61</width>
       <height>31</height>
      </rect>
@@ -1319,7 +1319,7 @@
       <string>Browse</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_4">
+    <widget class="QLabel" name="file_path_label">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -1329,7 +1329,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>FileName</string>
+      <string>File Path</string>
      </property>
     </widget>
     <widget class="QLineEdit" name="file_lineedit">
@@ -1342,8 +1342,31 @@
       </rect>
      </property>
     </widget>
+    <widget class="QLineEdit" name="file_name_lineedit">
+     <property name="geometry">
+      <rect>
+       <x>102</x>
+       <y>40</y>
+       <width>91</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="file_path_label_2">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>81</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Exp Folder Name</string>
+     </property>
+    </widget>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>51</x>
@@ -1384,6 +1407,60 @@
       </widget>
      </item>
     </layout>
+   </widget>
+   <widget class="QLabel" name="temp_stability_label">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>130</y>
+      <width>111</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Temp Stability&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="set_temp_label">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>80</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set Temp&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="current_temp_label">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>30</y>
+      <width>111</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Current Temp&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
