@@ -184,15 +184,8 @@ class MyApp(QMainWindow):
         Temp = np.linspace(start_temp, end_temp, abs((start_temp - end_temp))/temp_int + 1)
         cuvette.temp_control_on()
         name = self.ui.file_name_lineedit.text()
-        
-        name = Model.createExpFolder(name, filePath)
-        #update GUI with new name
-        self.ui.file_name_lineedit.setText(name)
-        app.processEvents()
         print('filePath is ' + filePath)
-        
-        spectra_repeat = self.ui.spectra_repeat_num.text()
-        spectra_repeat = int(spectra_repeat)
+        Model.createExpFolder(name, filePath)
         
         
         for t in Temp:
@@ -219,27 +212,23 @@ class MyApp(QMainWindow):
                 status_text = str(status[3])
                 self.ui.stabilityDisplay.setText(status_text)
                 
-            #mask = (spec.wavelengths() > 500) & (spec.wavelengths() < 750)
-            #wavelengths = spec.wavelengths()[mask]
-            #intensities = spec.intensities()[mask]
+            mask = (spec.wavelengths() > 500) & (spec.wavelengths() < 750)
+            wavelengths = spec.wavelengths()[mask]
+            intensities = spec.intensities()[mask]
             self.plotSomething()
             #check to see if we can click button
             
             
             app.processEvents()
-            columnNames = ["temp","wavelengths"]
-            df1 = pd.DataFrame({"temp": np.array([t])})
-            df2 = pd.DataFrame({"wavelengths": spec.wavelengths()})
-            df = pd.concat([df1,df2], ignore_index = True, axis = 1)
             
-            for  i in range(spectra_repeat):
-                columnNames.append("intensity_{}".format(i))
-                dfi = pd.DataFrame({"intensities{}".format(i): spec.intensities()})
-                df = pd.concat([df,dfi], ignore_index = True, axis = 1)
+            df2 = pd.DataFrame({"intensities": spec.intensities()})
+            df3 = pd.DataFrame({"temp": np.array([t])})
+            df1 = pd.DataFrame({"wavelengths": spec.wavelengths()})
+            df = pd.concat([df1,df2,df3], ignore_index = True, axis = 1)
             #path = 'C:/Users/Chris/Documents/Dionne Group/Lab Software/CuvetteSpectra/CuvetteSpectra/data/'
             #path = 'C:/Users/Claire/Documents/Postdoc/CuvetteSpectra/data/'
             
-            df.to_csv(filePath + "/" + name + "/spectra{}.csv".format(t), index = False, header = columnNames)
+            df.to_csv(filePath + "/" + name + "/spectra{}.csv".format(t), index = False, header = ["WL", "Int", "temp"])
     
 
 

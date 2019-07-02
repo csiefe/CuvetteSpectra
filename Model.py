@@ -47,20 +47,22 @@ class Model:
             self.fileContents = ""
             self.fileName = ""
             
-    def getFileName( self ):
+    def getFileName( self ):    
         '''
         Returns the name of the file name member.
         '''
         return self.fileName
 
 
-    def createExpFolder( self , name , filePath):
+    def createExpFolder( name , path):
         '''
         Make a folder for the experiment to save files in.
+        Make a running count
         '''
-        while os.isdir(filePath + '/name'):
+        
+        while os.path.isdir(path + '/' + name):#this needs to change
             name = name + str(0)
-        os.mkdir(filePath + '/' + name)
+        os.mkdir(path + '/' + name)
         return name
 
     
