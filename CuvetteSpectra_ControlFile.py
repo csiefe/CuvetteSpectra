@@ -52,7 +52,7 @@ class MyApp(QMainWindow):
         
         self.ui.stir_button.setCheckable(True)
         self.ui.stir_button.toggle()
-        self.ui.stir_button.setStyleSheet("QPushButton { background-color: purple }")
+        self.ui.stir_button.setStyleSheet("QPushButton { background-color: #aa2b88; border: 0px }")
         self.ui.stir_button.clicked.connect(self.stir)
     
         #add file buttons
@@ -158,11 +158,11 @@ class MyApp(QMainWindow):
         if self.ui.stir_button.isChecked():
             cuvette.stir_on()
             self.ui.stir_button.setText("Stir On")
-            self.ui.stir_button.setStyleSheet("QPushButton { background-color: blue }")
+            self.ui.stir_button.setStyleSheet("QPushButton { background-color: #28d60d; border: 0px}")
         else:
             cuvette.stir_off()
             self.ui.stir_button.setText("Stir Off")
-            self.ui.stir_button.setStyleSheet("QPushButton { background-color: red }")
+            self.ui.stir_button.setStyleSheet("QPushButton { background-color: red; border: 0px }")
             
     def plotSomething(self):
         mask = (spec.wavelengths() > 500) & (spec.wavelengths() < 750)
