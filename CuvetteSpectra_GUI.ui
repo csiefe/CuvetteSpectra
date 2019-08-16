@@ -1167,6 +1167,9 @@
        <height>20</height>
       </rect>
      </property>
+     <property name="text">
+      <string>Test</string>
+     </property>
     </widget>
     <widget class="QLabel" name="file_path_label_2">
      <property name="geometry">
@@ -1179,6 +1182,19 @@
      </property>
      <property name="text">
       <string>Exp Folder Name</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="file_number_lineedit">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>40</y>
+       <width>71</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>0000</string>
      </property>
     </widget>
    </widget>

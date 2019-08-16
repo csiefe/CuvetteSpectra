@@ -184,10 +184,12 @@ class MyApp(QMainWindow):
         Temp = np.linspace(start_temp, end_temp, abs((start_temp - end_temp))/temp_int + 1)
         cuvette.temp_control_on()
         name = self.ui.file_name_lineedit.text()
-        
-        name = Model.createExpFolder(name, filePath)
+        folderNum = self.ui.file_number_lineedit.text()
+        folderNum = int(folderNum)
+
+        folderNum = Model.createExpFolder(name, folderNum, filePath)
         #update GUI with new name
-        self.ui.file_name_lineedit.setText(name)
+        self.ui.file_number_lineedit.setText(str(folderNum))
         app.processEvents()
         print('filePath is ' + filePath)
         
@@ -239,7 +241,7 @@ class MyApp(QMainWindow):
             #path = 'C:/Users/Chris/Documents/Dionne Group/Lab Software/CuvetteSpectra/CuvetteSpectra/data/'
             #path = 'C:/Users/Claire/Documents/Postdoc/CuvetteSpectra/data/'
             
-            df.to_csv(filePath + "/" + name + "/spectra{}.csv".format(t), index = False, header = columnNames)
+            df.to_csv(filePath + "/" + name + str(folderNum) +"/spectra{}.csv".format(t), index = False, header = columnNames)
     
 
 

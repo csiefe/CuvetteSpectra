@@ -54,16 +54,20 @@ class Model:
         return self.fileName
 
 
-    def createExpFolder( name , path):
+    def createExpFolder( name, number, path):
         '''
         Make a folder for the experiment to save files in.
         Make a running count
         '''
         
-        while os.path.isdir(path + '/' + name):#this needs to change
-            name = name + str(0)
-        os.mkdir(path + '/' + name)
-        return name
+        #if path of name +num exists then num = num+ 1 
+        
+        
+       
+        while os.path.isdir(path + '/' + name +str(number)):#this needs to change
+            number +=1
+        os.mkdir(path + '/' + name + str(number))
+        return number
 
     
     def writeDoc( self, text ):
