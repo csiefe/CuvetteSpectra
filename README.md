@@ -20,7 +20,7 @@ numpy
 matplotlib
 
 After downloading files from repository into the same folder, using your favorite Python interpreter run CuvetteSpectra_ControlFile.py. The GUI should promptly open.
-![Alt text](relative/path/to/img.jpg?raw=true "Title")
+![Alt text](relative/path/to/CuvetteSpectra GUI.png?raw=true "Title")
 ```
 until finished
 ```
