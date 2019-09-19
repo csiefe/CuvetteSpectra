@@ -19,11 +19,12 @@ pandas
 numpy
 matplotlib
 
-After downloading files from repository into the same folder, using your favorite Python interpreter run CuvetteSpectra_ControlFile.py. The GUI should promptly open.
+After downloading files from repository into the same folder, using your favorite Python interpreter run CuvetteSpectra_ControlFile.py. The GUI should promptly open (see below).
+
 ![Alt text](https://github.com/mcleca8/CuvetteSpectra/blob/master/CuvetteSpectra%20GUI.PNG?raw=true)
-```
-until finished
-```
+
+Type in the correct COM port for your cuvette holder. You can determine this by looking at your Device Manager.
+Click "Initialize Spectrometer" and "Initialize Cuvette Holder" and ensure there are no errors (you will be prompted if there are). ##You're ready to take data!
 
 End with an example of getting some data out of the system or using it for a little demo
 
