@@ -24,15 +24,27 @@ After downloading files from repository into the same folder, using your favorit
 ![Alt text](https://github.com/mcleca8/CuvetteSpectra/blob/master/CuvetteSpectra%20GUI.PNG?raw=true)
 
 Type in the correct COM port for your cuvette holder. You can determine this by looking at your Device Manager.
-Click "Initialize Spectrometer" and "Initialize Cuvette Holder" and ensure there are no errors (you will be prompted if there are). ##You're ready to take data!
+Click "Initialize Spectrometer" and "Initialize Cuvette Holder" and ensure there are no errors (you will be prompted if there are). **You're ready to take data!**
 
-End with an example of getting some data out of the system or using it for a little demo
+## Current Capabilities of GUI
 
-## Running the tests
+1. Collect spectra
+2. Collect temperature-dependent spectral series
 
-Explain how to run the automated tests for this system
+All of this with the ability to stir, monitor the temperature and temperature stability of the cuvette holder, and view and save data.
 
-### Break down into end to end tests
+## Collect spectra
+
+Change the integration time to the desired value and click "Collect Spectra"!
+Once collected, the spectra will appear on the GUI for you to view. 
+
+## Collect temperature-dependent spectral series
+
+Change the integration time to the desired value.
+Set start and stop temperature values and temperature interval.
+Set the repeat number (how many spectra you would like to collect at each temperature). 
+Set the file path and folder name. If the folder already exists, a new folder with a number appended to it will be created. Data will not be overwritten.
+
 
 Explain what these tests test and why
 
